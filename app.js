@@ -17,7 +17,40 @@ const STATUS_LABELS = {
 };
 
 // ---------- Data ----------
-let books = [];
+const STORAGE_KEY = "books";
+
+let books = loadBooks();
+
+// Reads the saved list. Returns [] if nothing is saved or the data is broken.
+function loadBooks() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!Array.isArray(saved)) return []; // nothing saved yet (null) or not a list
+
+    // Keep only entries that look like books, so one bad entry can't break the page
+    return saved.filter(
+      (book) =>
+        book !== null &&
+        typeof book === "object" &&
+        typeof book.title === "string" &&
+        typeof book.author === "string" &&
+        book.status in STATUS_LABELS &&
+        typeof book.createdAt === "number"
+    );
+  } catch (error) {
+    return []; // the saved text isn't valid JSON, or localStorage is blocked
+  }
+}
+
+// Writes the whole list. Call after every add, change or delete.
+function saveBooks() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+  } catch (error) {
+    // Storage is full or blocked (e.g. some private windows): the page still works, it just won't remember
+    console.warn("Could not save books:", error);
+  }
+}
 
 // A unique id such as "b1760438400000-k3f9"
 function createId() {
@@ -109,6 +142,7 @@ bookForm.addEventListener("submit", function (event) {
     createdAt: Date.now(),
   });
 
+  saveBooks();
   renderBooks();
 
   bookForm.reset(); // empties the text boxes and sets status back to "To read"
@@ -125,4 +159,4 @@ authorInput.addEventListener("input", function () {
 });
 
 // ---------- Start ----------
-renderBooks(); // draw the list once when the page opens (shows the empty message)
+renderBooks(); // draw the saved list (or the empty message) when the page opens
