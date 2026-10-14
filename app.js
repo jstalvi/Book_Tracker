@@ -142,6 +142,7 @@ function renderBooks() {
     item.className = "book-item";
 
     const info = document.createElement("div");
+    info.className = "book-info";
 
     // textContent (not innerHTML) so typed text like <b>test</b> shows as plain text
     const title = document.createElement("h2");
