@@ -45,38 +45,45 @@ function checkAuthor() {
 
 // ---------- Drawing the list ----------
 
-function createBookItem(book) {
-  const item = document.createElement("li");
-  item.className = "book-item";
-
-  const info = document.createElement("div");
-
-  // textContent (not innerHTML) so typed text is never treated as HTML
-  const title = document.createElement("h2");
-  title.className = "book-title";
-  title.textContent = book.title;
-
-  const author = document.createElement("p");
-  author.className = "book-author";
-  author.textContent = book.author;
-
-  info.append(title, author);
-
-  const label = document.createElement("span");
-  label.className = "status-label status-" + book.status;
-  label.textContent = STATUS_LABELS[book.status];
-
-  item.append(info, label);
-  return item;
-}
-
-// Redraws the whole list, newest first
+// Redraws the whole list from the books array, newest first.
+// Call this every time the books array changes.
 function renderBooks() {
+  bookList.innerHTML = "";
+
+  if (books.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "empty-state";
+    empty.textContent = "No books yet. Add your first one above.";
+    bookList.appendChild(empty);
+    return;
+  }
+
+  // slice() makes a copy so sorting doesn't change the books array itself
   const newestFirst = books.slice().sort((a, b) => b.createdAt - a.createdAt);
 
-  bookList.innerHTML = "";
   for (const book of newestFirst) {
-    bookList.appendChild(createBookItem(book));
+    const item = document.createElement("li");
+    item.className = "book-item";
+
+    const info = document.createElement("div");
+
+    // textContent (not innerHTML) so typed text like <b>test</b> shows as plain text
+    const title = document.createElement("h2");
+    title.className = "book-title";
+    title.textContent = book.title;
+
+    const author = document.createElement("p");
+    author.className = "book-author";
+    author.textContent = book.author;
+
+    info.append(title, author);
+
+    const label = document.createElement("span");
+    label.className = "status-label status-" + book.status;
+    label.textContent = STATUS_LABELS[book.status];
+
+    item.append(info, label);
+    bookList.appendChild(item);
   }
 }
 
@@ -116,3 +123,6 @@ titleInput.addEventListener("input", function () {
 authorInput.addEventListener("input", function () {
   if (authorError.textContent) checkAuthor();
 });
+
+// ---------- Start ----------
+renderBooks(); // draw the list once when the page opens (shows the empty message)
