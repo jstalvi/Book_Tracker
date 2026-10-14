@@ -169,6 +169,23 @@ button:focus-visible {
   font-size: 0.85rem;
 }
 
+/* Small outlined button, overriding the full-width Add button style */
+.book-delete-button {
+  width: auto;
+  margin: 0;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--error);
+  font-size: 0.8rem;
+}
+
+.book-delete-button:hover {
+  background: #fbeaea;
+  border-color: var(--error);
+}
+
 /* Status labels: soft background with darker text, one color per status */
 .status-label {
   flex-shrink: 0;

@@ -154,7 +154,15 @@ function renderBooks() {
 
     const controls = document.createElement("div");
     controls.className = "book-controls";
-    controls.append(label, select);
+    // Delete button, linked to the book by id in the same way as the dropdown
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "book-delete-button";
+    deleteButton.dataset.id = book.id;
+    deleteButton.setAttribute("aria-label", "Delete " + book.title);
+    deleteButton.textContent = "Delete";
+
+    controls.append(label, select, deleteButton);
 
     item.append(info, controls);
     bookList.appendChild(item);
@@ -215,6 +223,19 @@ bookList.addEventListener("change", function (event) {
   // Redrawing replaces the dropdown, so put keyboard focus back on the new one
   const newSelect = bookList.querySelector('select[data-id="' + CSS.escape(id) + '"]');
   if (newSelect) newSelect.focus();
+});
+
+// One listener on the list handles every book's Delete button
+bookList.addEventListener("click", function (event) {
+  const button = event.target;
+  if (!button.classList.contains("book-delete-button")) return;
+
+  if (!confirm("Delete this book?")) return;
+
+  const id = button.dataset.id;
+  books = books.filter((b) => b.id !== id);
+  saveBooks();
+  renderBooks();
 });
 
 // Redraw on every keystroke (and when the search box's clear button is used)
