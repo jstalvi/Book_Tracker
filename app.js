@@ -33,6 +33,7 @@ function loadBooks() {
       (book) =>
         book !== null &&
         typeof book === "object" &&
+        typeof book.id === "string" &&
         typeof book.title === "string" &&
         typeof book.author === "string" &&
         book.status in STATUS_LABELS &&
@@ -137,7 +138,25 @@ function renderBooks() {
     label.className = "status-label status-" + book.status;
     label.textContent = STATUS_LABELS[book.status];
 
-    item.append(info, label);
+    // Status dropdown. data-id links it to the book, so a change finds the right
+    // book even when a search hides some books and the positions shift.
+    const select = document.createElement("select");
+    select.className = "book-status-select";
+    select.dataset.id = book.id;
+    select.setAttribute("aria-label", "Status for " + book.title);
+    for (const [value, text] of Object.entries(STATUS_LABELS)) {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = text;
+      select.appendChild(option);
+    }
+    select.value = book.status;
+
+    const controls = document.createElement("div");
+    controls.className = "book-controls";
+    controls.append(label, select);
+
+    item.append(info, controls);
     bookList.appendChild(item);
   }
 }
@@ -178,6 +197,24 @@ titleInput.addEventListener("input", function () {
 
 authorInput.addEventListener("input", function () {
   if (authorError.textContent) checkAuthor();
+});
+
+// One listener on the list handles every book's status dropdown, including ones drawn later
+bookList.addEventListener("change", function (event) {
+  const select = event.target;
+  if (!select.classList.contains("book-status-select")) return;
+
+  const id = select.dataset.id;
+  const book = books.find((b) => b.id === id);
+  if (!book || !(select.value in STATUS_LABELS)) return;
+
+  book.status = select.value;
+  saveBooks();
+  renderBooks();
+
+  // Redrawing replaces the dropdown, so put keyboard focus back on the new one
+  const newSelect = bookList.querySelector('select[data-id="' + CSS.escape(id) + '"]');
+  if (newSelect) newSelect.focus();
 });
 
 // Redraw on every keystroke (and when the search box's clear button is used)
