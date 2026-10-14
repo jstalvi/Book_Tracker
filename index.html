@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- defer: run app.js after the HTML has been read, so every id below already exists -->
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <h1>Book Tracker</h1>
+
+    <!-- book-form: the add-book form. app.js will listen for its submit event.
+         novalidate turns off the browser's own error pop-ups so we can show our own messages. -->
+    <form id="book-form" class="card" novalidate>
+
+      <div class="field">
+        <label for="title-input">Title</label>
+        <!-- title-input: where the user types the book title -->
+        <input type="text" id="title-input" name="title" autocomplete="off">
+        <!-- title-error: empty for now; app.js will put the title error message here -->
+        <p id="title-error" class="error-message" aria-live="polite"></p>
+      </div>
+
+      <div class="field">
+        <label for="author-input">Author</label>
+        <!-- author-input: where the user types the author's name -->
+        <input type="text" id="author-input" name="author" autocomplete="off">
+        <!-- author-error: empty for now; app.js will put the author error message here -->
+        <p id="author-error" class="error-message" aria-live="polite"></p>
+      </div>
+
+      <div class="field">
+        <label for="status-select">Status</label>
+        <!-- status-select: the reading status. Each value is the short code saved in the book object -->
+        <select id="status-select" name="status">
+          <option value="to-read">To read</option>
+          <option value="reading">Reading</option>
+          <option value="finished">Finished</option>
+        </select>
+      </div>
+
+      <!-- add-button: submits the form to add the book -->
+      <button type="submit" id="add-button">Add</button>
+    </form>
+
+    <!-- book-list: empty for now; app.js will add one <li> per book here, newest first -->
+    <ul id="book-list" class="book-list"></ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,167 @@
+/* Color theme built around the main color #301728 (deep plum) */
+:root {
+  --primary: #301728;        /* main color: heading, button, focus */
+  --primary-hover: #4a2440;  /* a little lighter, for button hover */
+  --primary-soft: #f1e8ee;   /* very light plum, for subtle backgrounds */
+  --background: #faf6f8;     /* page background, warm off-white */
+  --surface: #ffffff;        /* cards and inputs */
+  --border: #e2d6dd;         /* input and card borders */
+  --text: #2a1a24;           /* main text */
+  --text-muted: #6e5a66;     /* labels and secondary text */
+  --error: #b3261e;          /* error messages */
+  --focus-ring: rgba(48, 23, 40, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+h1 {
+  margin: 0 0 24px;
+  color: var(--primary);
+  font-size: 2rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(48, 23, 40, 0.08);
+}
+
+/* ---------- Form ---------- */
+
+.field {
+  margin-bottom: 8px;
+}
+
+label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Fixed height so the form doesn't jump when a message appears */
+.error-message {
+  min-height: 1.25rem;
+  margin: 4px 0 0;
+  color: var(--error);
+  font-size: 0.85rem;
+}
+
+button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--primary-hover);
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* ---------- Book list ---------- */
+
+.book-list {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+}
+
+.book-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: 10px;
+}
+
+.book-title {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--primary);
+  overflow-wrap: anywhere;
+}
+
+.book-author {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+/* Status labels: soft background with darker text, one color per status */
+.status-label {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-to-read {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.status-reading {
+  background: #fbeedd;
+  color: #7a4a12;
+}
+
+.status-finished {
+  background: #e3f1e6;
+  color: #24603a;
+}
