@@ -46,6 +46,13 @@
       <button type="submit" id="add-button">Add</button>
     </form>
 
+    <!-- search-input: filters the list by title or author as you type. It is outside the form,
+         so adding a book (which clears the form) keeps the search text. -->
+    <div class="search">
+      <label for="search-input">Search</label>
+      <input type="search" id="search-input" placeholder="Search by title or author" autocomplete="off">
+    </div>
+
     <!-- book-list: empty for now; app.js will add one <li> per book here, newest first -->
     <ul id="book-list" class="book-list"></ul>
   </main>

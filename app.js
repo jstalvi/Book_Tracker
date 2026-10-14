@@ -8,6 +8,7 @@ const statusSelect = document.getElementById("status-select");
 const titleError = document.getElementById("title-error");
 const authorError = document.getElementById("author-error");
 const bookList = document.getElementById("book-list");
+const searchInput = document.getElementById("search-input");
 
 // The text shown on the page for each saved status value
 const STATUS_LABELS = {
@@ -78,21 +79,42 @@ function checkAuthor() {
 
 // ---------- Drawing the list ----------
 
-// Redraws the whole list from the books array, newest first.
-// Call this every time the books array changes.
+function showMessage(text) {
+  const message = document.createElement("li");
+  message.className = "empty-state";
+  message.textContent = text;
+  bookList.appendChild(message);
+}
+
+// True when the title or author contains the search text, ignoring capital letters
+function matchesSearch(book, query) {
+  return (
+    book.title.toLowerCase().includes(query) ||
+    book.author.toLowerCase().includes(query)
+  );
+}
+
+// Redraws the whole list from the books array, newest first, showing only books
+// that match the search box. Call this every time the books array or the search changes.
 function renderBooks() {
   bookList.innerHTML = "";
 
   if (books.length === 0) {
-    const empty = document.createElement("li");
-    empty.className = "empty-state";
-    empty.textContent = "No books yet. Add your first one above.";
-    bookList.appendChild(empty);
+    showMessage("No books yet. Add your first one above.");
     return;
   }
 
-  // slice() makes a copy so sorting doesn't change the books array itself
-  const newestFirst = books.slice().sort((a, b) => b.createdAt - a.createdAt);
+  // An empty search matches every book. filter() and slice() both make new arrays,
+  // so the books array itself is never changed by searching or sorting.
+  const query = searchInput.value.trim().toLowerCase();
+  const visible = books.filter((book) => matchesSearch(book, query));
+
+  if (visible.length === 0) {
+    showMessage("No books match your search.");
+    return;
+  }
+
+  const newestFirst = visible.slice().sort((a, b) => b.createdAt - a.createdAt);
 
   for (const book of newestFirst) {
     const item = document.createElement("li");
@@ -157,6 +179,9 @@ titleInput.addEventListener("input", function () {
 authorInput.addEventListener("input", function () {
   if (authorError.textContent) checkAuthor();
 });
+
+// Redraw on every keystroke (and when the search box's clear button is used)
+searchInput.addEventListener("input", renderBooks);
 
 // ---------- Start ----------
 renderBooks(); // draw the saved list (or the empty message) when the page opens
