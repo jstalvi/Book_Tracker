@@ -9,6 +9,7 @@ const titleError = document.getElementById("title-error");
 const authorError = document.getElementById("author-error");
 const bookList = document.getElementById("book-list");
 const searchInput = document.getElementById("search-input");
+const bookSummary = document.getElementById("book-summary");
 
 // The text shown on the page for each saved status value
 const STATUS_LABELS = {
@@ -95,9 +96,28 @@ function matchesSearch(book, query) {
   );
 }
 
+// Order and wording for the summary line
+const SUMMARY_ORDER = [
+  ["finished", "finished"],
+  ["reading", "reading"],
+  ["to-read", "to read"],
+];
+
+// Writes e.g. "3 finished, 1 reading, 2 to read", counted from ALL books (not the search
+// results). Statuses with zero books are left out; with no books it shows nothing.
+function renderSummary() {
+  const parts = [];
+  for (const [status, text] of SUMMARY_ORDER) {
+    const count = books.filter((book) => book.status === status).length;
+    if (count > 0) parts.push(count + " " + text);
+  }
+  bookSummary.textContent = parts.join(", ");
+}
+
 // Redraws the whole list from the books array, newest first, showing only books
 // that match the search box. Call this every time the books array or the search changes.
 function renderBooks() {
+  renderSummary();
   bookList.innerHTML = "";
 
   if (books.length === 0) {

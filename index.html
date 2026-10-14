@@ -53,6 +53,9 @@
       <input type="search" id="search-input" placeholder="Search by title or author" autocomplete="off">
     </div>
 
+    <!-- book-summary: counts per status from all books (ignores the search), e.g. "3 finished, 1 reading" -->
+    <p id="book-summary" class="book-summary" aria-live="polite"></p>
+
     <!-- book-list: empty for now; app.js will add one <li> per book here, newest first -->
     <ul id="book-list" class="book-list"></ul>
   </main>
